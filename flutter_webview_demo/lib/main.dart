@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'menu.dart';
 import 'dart:async';
 import 'navigationControls.dart';
 
@@ -44,14 +44,14 @@ class _WikiExplorerState extends State<WikiExplorer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wikipedia Explorer"),
+        title: Text("Flutter Explorer"),
         actions: <Widget>[
           NavigationControls(_controller.future),
           Menu(_controller.future, () => _favorites),
         ],
       ),
       body: WebView(
-        initialUrl: 'https://en.wikipedia.org/wiki/Kraken',
+        initialUrl: 'https://flutter.dev',
         javaScriptMode: JavaScriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller.complete(webViewController);
@@ -86,113 +86,7 @@ class _WikiExplorerState extends State<WikiExplorer> {
   }
 }
 
-class Menu extends StatelessWidget {
-  Menu(this._webViewControllerFuture, this.favoritesAccessor);
 
-  final Future<WebViewController> _webViewControllerFuture;
-  final Function favoritesAccessor;
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _webViewControllerFuture,
-      builder:
-          (BuildContext context, AsyncSnapshot<WebViewController> controller) {
-        if (!controller.hasData) return Container();
 
-        return PopupMenuButton<String>(
-          onSelected: (String value) async {
-            String newUrl;
-            if (value == 'Email link') {
-              var url = await controller.data.currentUrl();
-              await launch(
-                  'mailto:?subject=Check out this cool Wikipedia page&body=$url');
-              return;
-            } else if (value == 'See Favorites') {
-              newUrl = await Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return FavoritesPage(favoritesAccessor());
-                  }));
-            } else {
-              newUrl = await Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return InputPage();
-                  }));
-            }
-
-            Scaffold.of(context).removeCurrentSnackBar();
-            if (newUrl != null) {
-              controller.data.loadUrl(newUrl);
-            }
-          },
-          itemBuilder: (BuildContext context) =>
-          <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(
-              value: 'Email link',
-              child: Text('Email link'),
-            ),
-            const PopupMenuItem<String>(
-              value: 'See Favorites',
-              child: Text('See favorites'),
-            ),
-            const PopupMenuItem<String>(
-                value: 'Input Address', child: Text('Input Address'))
-          ],
-        );
-      },
-    );
-  }
-}
-
-class FavoritesPage extends StatelessWidget {
-  FavoritesPage(this.favorites);
-
-  final Set<String> favorites;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorite pages'),
-      ),
-      body: ListView(
-          children: favorites
-              .map((url) =>
-              ListTile(
-                  title: Text(url), onTap: () => Navigator.pop(context, url)))
-              .toList()),
-    );
-  }
-}
-
-class InputPage extends StatefulWidget {
-  @override
-  _InputPageState createState() => _InputPageState();
-}
-
-class _InputPageState extends State<InputPage> {
-  final _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Please input url'),),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _controller,
-            ),
-          ),
-
-          RaisedButton(
-            child: Icon(Icons.done),
-            onPressed: () => Navigator.pop(context, _controller.text),
-          )
-        ],
-      ),
-    );
-  }
-}
 
