@@ -51,14 +51,14 @@ class Menu extends StatelessWidget {
             }
           },
           itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(
-              value: 'Email link',
-              child: Text('Email link'),
-            ),
-            const PopupMenuItem<String>(
-              value: 'See Favorites',
-              child: Text('See favorites'),
-            ),
+            // const PopupMenuItem<String>(
+            //   value: 'Email link',
+            //   child: Text('Email link'),
+            // ),
+            // const PopupMenuItem<String>(
+            //   value: 'See Favorites',
+            //   child: Text('See favorites'),
+            // ),
             const PopupMenuItem<String>(
                 value: 'Input Address', child: Text('Input Address'))
           ],

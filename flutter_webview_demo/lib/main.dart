@@ -44,7 +44,7 @@ class _WikiExplorerState extends State<WikiExplorer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Flutter Explorer"),
+        title: Text("Flutter Demo"),
         actions: <Widget>[
           NavigationControls(_controller.future),
           Menu(_controller.future, () => _favorites),
@@ -57,7 +57,7 @@ class _WikiExplorerState extends State<WikiExplorer> {
           _controller.complete(webViewController);
         },
       ),
-      floatingActionButton: _bookmarkButton(),
+      // floatingActionButton: _bookmarkButton(),
     );
   }
 
