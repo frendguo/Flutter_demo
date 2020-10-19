@@ -52,7 +52,7 @@ class _WikiExplorerState extends State<WikiExplorer> {
       ),
       body: WebView(
         initialUrl: 'https://flutter.dev',
-        javaScriptMode: JavaScriptMode.unrestricted,
+        javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller.complete(webViewController);
         },
